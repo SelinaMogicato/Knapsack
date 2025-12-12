@@ -85,7 +85,7 @@ public class SmartBackpack extends Backpack {
             }
         }
 
-        // Bestimme bestes Gewicht (größtes w mit dp[w] == true)
+        // Bestimme bestes Gewicht (grösstes w mit dp[w] == true)
         int best = 0;
         for (int w = capacity; w >= 0; w--) {
             if (dp[w]) {
