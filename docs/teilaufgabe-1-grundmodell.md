@@ -16,6 +16,6 @@ Wir modellieren eine klassische Situation: Ein Rucksack mit begrenzter Tragkraft
 
 - **Maximalgewicht:** Wird im Konstruktor gesetzt und kann nicht mehr geaendert werden (Rucksack wird nicht grösser).
 - **addItem Methode:**
-  - Gibt `boolean` zurück: `trü` = erfolgreich gepackt, `false` = zu schwer.
+  - Gibt `boolean` zurück: `true` = erfolgreich gepackt, `false` = zu schwer.
   - Verhindert aktiv, dass der Rucksack überladen wird.
 - **Ziel:** Eine stabile, einfache Basis schaffen, die fehlerhafte Zustaende (z.B. negatives Gewicht, überladung) technisch unmöglich macht.
