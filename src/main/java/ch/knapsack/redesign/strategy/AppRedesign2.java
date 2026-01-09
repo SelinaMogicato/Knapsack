@@ -13,7 +13,7 @@ public class AppRedesign2 {
                 new Item(4),
                 new Item(3),
                 new Item(3),
-                new Item(3));
+                new Item(2));
 
         // Erzeuge eine StrategyBackpack-Instanz mit Maximalgewicht 20
         // Startstrategie: GreedyPackingStrategy
