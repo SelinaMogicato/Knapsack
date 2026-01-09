@@ -1,146 +1,77 @@
 # Sitzungsprotokoll Code Review – Knapsack (Teilaufgabe 7)
 
-**Datum:** [TT.MM.JJJJ]  
-**Zeit:** [hh:mm] – [hh:mm]  
+**Datum:** 18.12.2025  
+**Zeit:** 10:15 – 10:45  
 **Ort:** Schule
 
 **Teilnehmende:**
-
 - Selina
 - Lysandro
 
 **Ziel des Meetings:**  
-Vergleich der beiden Lösungen (Design und Implementierung) zum Knapsack/Rucksack. Diskussion von Alternativen sowie Bewertung von Laufzeit und Approximationsgüte.
-
+Vergleich der beiden Lösungen (Design und Implementierung) zum Knapsack/Rucksack, inklusive Diskussion von Alternativen sowie Bewertung von Laufzeit und Approximationsgüte.
 ---
-
-## 1) Kurzübersicht der eigenen Lösung (mein Stand)
-
+## 1) Eigene Lösung – Kurzübersicht
 ### Klassen und Design
-
 - **Item**
-  - Attribute (protected): `weightGrams:int`, `name:String` (optional)
-  - Unveraenderlich (keine Setter)
-  - Gleichheit: Zwei Items gelten als gleich, wenn `weightGrams` gleich ist (Name wird ignoriert)
+  - Attribute (protected): `weightGrams`, `name` (optional)
+  - Unveränderlich, keine Setter
+  - Gleichheit nur über das Gewicht
 - **Backpack**
-  - Attribute (protected): `maxWeightGrams:int`, `items:List<Item>`
-  - `addItem(Item):boolean` fügt ein Item nur hinzu, wenn das Maximalgewicht nicht überschritten wird
-  - Weitere Methoden: `getCurrentWeightGrams()`, `clear()`, `getItems()` (unveraenderliche Sicht)
-- **SmartBackpack extends Backpack**
-  - Methode `pack(Collection<Item>)` zum Packen mehrerer Gegenstaende
-  - Wenn die Summe aller Gewichte <= Maximalgewicht ist, werden alle Items gepackt
-  - Wenn die Summe > Maximalgewicht ist, wird eine optimale Teilmenge bestimmt
-
+  - Attribute (protected): `maxWeightGrams`, `items`
+  - `addItem` gibt boolean zurück, falls Maximalgewicht überschritten würde
+- **SmartBackpack**
+  - Packt mehrere Items auf einmal
+  - Bei Überschreitung wird eine optimale Teilmenge berechnet
 ### Algorithmus
-
-- Verwendeter Ansatz: **dynamische Programmierung (Subset Sum / 0-1 Knapsack ohne Werte)**
-- Ziel: maximales Gesamtgewicht <= Maximalgewicht
-- Rekonstruktion der gewaehlten Items über Hilfsarrays
-
-### Unit-Tests (eigene Seite)
-
-- **BackpackTest:** prüft, dass das Maximalgewicht nicht überschritten werden kann
-- **SmartBackpackTest:** prüft mit einem konkreten Fallbeispiel, dass das optimale Gewicht erreicht wird  
-  (z.B. Gewichte 6, 4, 3, 3 bei Maximalgewicht 10 → optimales Gewicht 10)
-
+- Dynamische Programmierung (Subset Sum / 0-1 Knapsack ohne Werte)
+- Ziel: maximales Gewicht <= Maximalgewich
+- Rekonstruktion der gewählten Items über Hilfsarrays
+### Tests
+- Test für Einhaltung des Maximalgewichts
+- Test, der ein bekannt optimales Ergebnis prüft (z.B. 6+4=10)
 ---
-
-## 2) Kurzübersicht der Partner-Lösung
-
-### Klassen und Design (Partner)
-
-- [Partner: Welche Klassen gibt es?]
-- [Partner: Wie ist das Design aufgebaut?]
-- [Partner: Wie wird Gleichheit von Items definiert?]
-- [Partner: Wie wird das Packen mehrerer Gegenstaende gelöst?]
-
-### Unit-Tests (Partner)
-
-- [Partner: Welche Tests existieren?]
-- [Partner: Gibt es Tests zur Optimalitaet? Falls ja, welches Fallbeispiel?]
-
+## 2) Partner-Lösung – Kurzübersicht
+### Klassen und Design
+- Klassen: `Item`, `Backpack`, `SmartBackpack`
+- Einfacheres Design ohne komplexe Vererbung
+- Gleichheit von Items über Gewicht **und** Name
+- Packen mehrerer Items mit Greedy-Ansatz (schwerste zuerst)
+### Tests
+- Tests für korrektes Hinzufügen von Items
+- Kein Test, der garantiert ein optimales Ergebnis prüft
 ---
-
-## 3) Unterschiede im Design (Klassendiagramme)
-
+## 3) Unterschiede im Design
 ### Gemeinsamkeiten
-
-- Gegenstaende besitzen ein Gewicht
-- Ein Rucksack hat ein Maximalgewicht und enthaelt mehrere Items
-- Es existiert eine Logik zum Hinzufügen bzw. Packen von Items
-
+- Items mit Gewicht
+- Rucksack mit Maximalgewicht
+- Logik zum Packen von Gegenständen
 ### Unterschiede
-
-- **Meine Lösung**
-  - `SmartBackpack` ist eine Subklasse von `Backpack`
-  - Batch-Packen über `pack(...)`
-  - Optimale Auswahl per dynamischer Programmierung
-- **Partner-Lösung**
-  - [Partner: z.B. keine Vererbung / andere Struktur]
-  - [Partner: anderer Algorithmus (greedy, brute force, etc.)]
-
+- **Meine Lösung:** optimale Packung mit dynamischer Programmierung
+- **Partner-Lösung:** Greedy-Algorithmus, schneller aber nicht immer optimal
 ---
-
-## 4) Code-Durchgang und alternative Implementierungen
-
-### Eigene Implementierung
-
-- Saubere Validierung (Null-Checks, positive Gewichte)
-- Keine Veraenderung interner Daten von aussen (`unmodifiableList`)
-- Klare Trennung zwischen einfachem Rucksack und smartem Rucksack
-
-### Diskutierte Alternativen
-
-- **Greedy-Algorithmen**
-  - Vorteil: sehr schnell und einfach
-  - Nachteil: oft nicht optimal
+## 4) Diskussion und Alternativen
+- **Greedy**
+  - + Sehr schnell, einfach
+  - – Kann falsche (suboptimale) Ergebnisse liefern
 - **Brute Force**
-  - Vorteil: garantiert optimal
-  - Nachteil: exponentielle Laufzeit
+  - + Immer optimal
+  - – Sehr schlechte Laufzeit
 - **Dynamische Programmierung (verwendet)**
-  - Vorteil: optimale Lösung
-  - Nachteil: Laufzeit und Speicherverbrauch haengen vom Maximalgewicht ab
-
-### Partner-Anmerkungen
-
-- [Partner: alternative Vorschlaege oder Verbesserungen]
-
+  - + Optimal
+  - – Abhängig vom Maximalgewicht
+Partner plant, Teile der optimalen Strategie später zu übernehmen.
 ---
-
-## 5) Vergleich: Laufzeit und Approximationsgüte
-
-### Meine Lösung
-
-- **Genauigkeit:** optimal
-- **Laufzeit:** O(n \* Maximalgewicht)
-- **Speicher:** O(Maximalgewicht)
-- **Geeignet für:** kleine bis mittlere Maximalgewichte (z.B. Schulbeispiele)
-
-### Partner-Lösung
-
-- **Genauigkeit:** [Partner]
-- **Laufzeit:** [Partner]
-- **Speicher:** [Partner]
-- **Geeignet für:** [Partner]
-
-### Vor- und Nachteile
-
-- **Meine Vorteile:** optimale Ergebnisse, gut testbar
-- **Meine Nachteile:** bei sehr grossem Maximalgewicht langsamer
-- **Partner Vorteile:** [Partner]
-- **Partner Nachteile:** [Partner]
-
+## 5) Laufzeit
+- **Meine Lösung**
+  - Genauigkeit: optimal
+  - Laufzeit: O(n * Maximalgewicht)
+  - Speicher: O(Maximalgewicht)
+- **Partner-Lösung**
+  - Genauigkeit: nicht immer optimal
+  - Laufzeit: O(n log n)
+  - Speicher: O(n)
 ---
-
-## 6) Beschlüsse und ToDos
-
-### Beschlüsse
-
-- [ ] [z.B. Beide Lösungen werden dokumentiert und verglichen]
-- [ ] [z.B. Fokus auf Erklaerung der Trade-offs]
-
-### ToDos
-
-- [ ] Partner-Teil ergaenzen
-- [ ] Protokoll auf maximal eine A4-Seite kürzen
-- [ ] Finale Version ins Projekt ablegen
+## 6) Beschlüsse
+- [x] Beide Lösungen werden dokumentiert und verglichen
+- [x] Code Review wird im Projekt abgelegt
